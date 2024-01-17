@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ArcGIS Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <style>
+      #viewDiv {
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/Graphic",
+        "esri/geometry/Point",
+        "esri/symbols/SimpleMarkerSymbol",
+        "esri/geometry/SpatialReference",
+        "esri/renderers/SimpleRenderer",
+      ], function (Map, MapView, FeatureLayer, Graphic, Point, SimpleMarkerSymbol, SpatialReference, SimpleRenderer) {
+        // Initialize the map
+        var map = new Map({
+          basemap: "satellite",
+        });
+
+        // Initialize the map view
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [-73.9415, 40.7068], // Set the initial center of the map
+          zoom: 15, // Set the initial zoom level
+        });
+
+        // Your CSV data (loaded from a separate JS file)
+        var csvData = getCSVData();
+
+        // Create a feature layer from the CSV data
+        var graphics = csvData.map(function (point, index) {
+          var [longitude, latitude] = point;
+          var graphic = new Graphic({
+            geometry: new Point({
+              x: longitude,
+              y: latitude,
+              spatialReference: new SpatialReference({ wkid: 4326 }), // WGS 1984
+            }),
+          });
+          return graphic;
+        });
+
+        var featureLayer = new FeatureLayer({
+          source: graphics,
+          objectIdField: "ObjectID",
+          geometryType: "point",
+          spatialReference: new SpatialReference({ wkid: 4326 }), // WGS 1984
+          renderer: new SimpleRenderer({
+            symbol: new SimpleMarkerSymbol({
+              style: "circle",
+              color: [0, 0, 255, 0.5],
+              size: "12px",
+              outline: {
+                color: [0, 0, 0, 1],
+                width: 1,
+              },
+            }),
+          }),
+        });
+
+        // Add the feature layer to the map
+        map.add(featureLayer);
+
+        // Add a click event listener to display coordinates in a popup
+        view.on("click", function (event) {
+          view.hitTest(event).then(function (response) {
+            if (response.results.length > 0) {
+              var graphic = response.results[0].graphic;
+              view.popup.open({
+                title: "Coordinates",
+                location: graphic.geometry,
+                content: "Longitude: " + graphic.geometry.longitude + "<br>Latitude: " + graphic.geometry.latitude,
+              });
+            }
+          });
+        });
+      });
+    </script>
+    <script src="csv-data.js"></script> <!-- Include your JavaScript file with the CSV data here -->
+  </body>
+</html>
