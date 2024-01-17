@@ -1,0 +1,7 @@
+1. Open the GEE link.
+2. (OPTIONAL)You can annotate more crosswalks and non-cross walks(REMEMBER TO SAVE)
+3. Run the code
+4. Got to task tab in GEE(right side of screen) and click run. A popup should come up to confirm the csv is going to be created and put in your google drive. If you choose to chaneg the name of the file, you need to also change it in the conversion code
+5. Go to your google drive and download the file
+6. Open the conversion code and run. I have it set that the file is located in my downloads folder and is sent to my folder where my Map html is
+7. Open the html, data should appear on the map.
