@@ -29,11 +29,14 @@ Detects crosswalks in NYC using Google Earth Engine and machine learning, export
 - Improve visualization with clustering for dense areas
 
 **Setup Instructions**
+
 *Run Detection on GEE:*
-Use the provided GEE script to detect crosswalks.
-Export CSV of detected coordinates.
+- Use the provided GEE script to detect crosswalks.
+- Export CSV of detected coordinates.
+
 *Convert CSV:*
-Use the provided Python script or manual method to convert CSV data to a .js file
+- Use the provided Python script or manual method to convert CSV data to a .js file
+
 *View on Esri Map:*
-Open the Esri map project and ensure your .js data file is correctly referenced
-View detected crosswalks on the map
+- Open the Esri map project and ensure your .js data file is correctly referenced
+- View detected crosswalks on the map
